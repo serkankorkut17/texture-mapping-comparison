@@ -1,0 +1,108 @@
+#include <SDL.h>
+#include <cmath>
+#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
+int main(int argc, char* args[]) {
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
+
+    SDL_Init(SDL_INIT_VIDEO);
+
+    window = SDL_CreateWindow("SDL Rotating Square Example", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    bool quit = false;
+    SDL_Event e;
+
+    int squareSize = 50;
+    float angle = 0.0f;
+    int centerX = SCREEN_WIDTH / 2;
+    int centerY = SCREEN_HEIGHT / 2;
+
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = true;
+            }
+        }
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+        SDL_RenderClear(renderer);
+
+        // Set the draw color to red
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+        // Calculate the rotated position of the square
+        int rotatedX = centerX + static_cast<int>(std::cos(angle) * squareSize);
+        int rotatedY = centerY + static_cast<int>(std::sin(angle) * squareSize);
+
+        // Draw the rotating square
+        SDL_Rect rotatingSquare = { rotatedX - squareSize / 2, rotatedY - squareSize / 2, squareSize, squareSize };
+        SDL_RenderDrawRect(renderer, &rotatingSquare);
+
+        SDL_RenderPresent(renderer);
+
+        // Rotate the square slowly
+        angle += 0.005;
+
+        // Cap the frame rate
+        SDL_Delay(10);
+    }
+
+    int modelviewmatrix(); // Declare the function prototype
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    modelviewmatrix();
+
+    return 0;
+}
+
+int modelviewmatrix() {
+    // Define vertices of the triangles
+    glm::vec3 triangle1[] = {
+        glm::vec3(1, -1, 0),
+        glm::vec3(1, 1, 0),
+        glm::vec3(-1, -1, 0)
+    };
+
+    glm::vec3 triangle2[] = {
+        glm::vec3(1, -1, 0),
+        glm::vec3(-1, 1, 0),
+        glm::vec3(-1, -1, 0)
+    };
+
+    // Define camera position and look-at point
+    glm::vec3 cameraPosition(2, 2, 6);
+    glm::vec3 lookAtPoint(0, 0, 0);
+    glm::vec3 upVector(0, 1, 0);
+
+    // Calculate the view matrix
+    glm::mat4 viewMatrix = glm::lookAt(cameraPosition, lookAtPoint, upVector);
+
+    //print viewMatrix to terminal
+    std::cout << "View Matrix: " << viewMatrix << std::endl;
+
+    // Define model matrix (identity matrix for simplicity)
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+
+    // Combine the model and view matrices to get the model-view matrix
+    glm::mat4 modelViewMatrix = viewMatrix * modelMatrix;
+
+    // Multiply each vertex by the model-view matrix
+    for (int i = 0; i < 3; ++i) {
+        glm::vec4 transformedVertex1 = modelViewMatrix * glm::vec4(triangle1[i], 1.0f);
+        glm::vec4 transformedVertex2 = modelViewMatrix * glm::vec4(triangle2[i], 1.0f);
+
+        std::cout << "Transformed Vertex (Triangle 1): " << transformedVertex1.x << ", " << transformedVertex1.y << ", " << transformedVertex1.z << std::endl;
+        std::cout << "Transformed Vertex (Triangle 2): " << transformedVertex2.x << ", " << transformedVertex2.y << ", " << transformedVertex2.z << std::endl;
+    }
+
+    return 0;
+}

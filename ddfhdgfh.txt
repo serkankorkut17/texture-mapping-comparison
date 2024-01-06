@@ -1,0 +1,45 @@
+int modelviewmatrix() {
+    // Define camera parameters
+    glm::vec3 cameraPosition = glm::vec3(2.0f, 2.0f, 6.0f);  // Camera position in world coordinates
+    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);     // Camera target point in world coordinates
+    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);         // Up vector for the camera
+
+    // Initialize rotation angle
+    float rotationAngle = 0.0f;
+    const float angularSpeed = glm::two_pi<float>() / 60.0f;  // Adjust for desired rotation speed (e.g., one rotation per second)
+
+    // Create a view matrix using glm::lookAt
+    glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+
+
+    while (true) {
+
+        // Create a model matrix for continuous rotation around the y-axis
+        glm::mat4 modelMatrix = glm::rotate(glm::mat4(1.0f), rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+
+        // Increment rotation angle
+        rotationAngle += angularSpeed;
+
+        // Combine the model matrix and view matrix to get the final transformation matrix
+        glm::mat4 transformationMatrix = viewMatrix * modelMatrix;
+
+        glm::vec4 cvertex1 = transformationMatrix * 
+
+        // print transformationMatrix
+        for (int i = 0; i < 4; i++) {
+            std::cout << "[ ";
+            for (int j = 0; j < 4; j++) {
+                std::cout << transformationMatrix[i][j] << " ";
+            }
+            std::cout << "]" << std::endl;
+        }
+
+        // Print or use the transformationMatrix as needed
+        // ...
+
+        // Optionally, add a delay to control rotation speed
+        // std::this_thread::sleep_for(std::chrono::milliseconds(16)); // Assuming a 60 FPS update rate
+    }
+
+    return 0;
+}
