@@ -4,8 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1366;
+const int SCREEN_HEIGHT = 768;
 
 int main(int argc, char* args[]) {
     SDL_Window* window = nullptr;
@@ -20,13 +20,13 @@ int main(int argc, char* args[]) {
     SDL_Event e;
 
     // Define camera parameters
-    glm::vec3 cameraPosition = glm::vec3(6.0f, 6.0f, 6.0f);  // Camera position in world coordinates
+    glm::vec3 cameraPosition = glm::vec3(7.0f, 7.0f, 6.0f);  // Camera position in world coordinates
     glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);     // Camera target point in world coordinates
     glm::vec3 cameraUp = glm::vec3(0.0f, 0.0f, 1.0f);         // Up vector for the camera
 
     // Initialize rotation angle
     float rotationAngle = 0.0f;
-    const float angularSpeed = glm::two_pi<float>() / 240.0f;  // Adjust for desired rotation speed (e.g., one rotation per second)
+    const float angularSpeed = glm::two_pi<float>() / 360.0f;  // Adjust for desired rotation speed (e.g., one rotation per second)
 
     // Create a view matrix using glm::lookAt
     glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
