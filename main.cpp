@@ -75,7 +75,7 @@ int main(int argc, char* args[]) {
 
 
 
-    window = SDL_CreateWindow("SDL Rotating Square Example", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Affine Texture vs Perspectively Correct Texture Maps", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     bool quit = false;
@@ -126,6 +126,9 @@ int main(int argc, char* args[]) {
                 }
             }
         }
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
         // Create a view matrix using glm::lookAt
         glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
         // Create a model matrix for continuous rotation around the y-axis
@@ -198,8 +201,8 @@ int main(int argc, char* args[]) {
                 calculateBarycentricCoordinates(p, v1, v2, v3, alpha, beta, gamma);
 
                 if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f && gamma >= 0.0f && gamma <= 1.0f) {
-                    //TexCoord texCoord = affineTextureMapping(p, v1, v2, v3, t1, t2, t3);
-                    TexCoord texCoord = perspectivelyCorrectTextureMapping(p, v1, v2, v3, t1, t2, t3, v1z, v2z, v3z);
+                    TexCoord texCoord = affineTextureMapping(p, v1, v2, v3, t1, t2, t3);
+                    //TexCoord texCoord = perspectivelyCorrectTextureMapping(p, v1, v2, v3, t1, t2, t3, v1z, v2z, v3z);
 
                     int texX = static_cast<int>(texCoord.s * textureSurface->w);
                     int texY = static_cast<int>(texCoord.t * textureSurface->h);
@@ -227,8 +230,8 @@ int main(int argc, char* args[]) {
                 calculateBarycentricCoordinates(p, v4, v5, v6, alpha, beta, gamma);
 
                 if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f && gamma >= 0.0f && gamma <= 1.0f) {
-                    //TexCoord texCoord = affineTextureMapping(p, v4, v5, v6, t4, t5, t6);
-                    TexCoord texCoord = perspectivelyCorrectTextureMapping(p, v4, v5, v6, t4, t5, t6, v4z, v5z, v6z);
+                    TexCoord texCoord = affineTextureMapping(p, v4, v5, v6, t4, t5, t6);
+                    //TexCoord texCoord = perspectivelyCorrectTextureMapping(p, v4, v5, v6, t4, t5, t6, v4z, v5z, v6z);
 
                     int texX = static_cast<int>(texCoord.s * textureSurface->w);
                     int texY = static_cast<int>(texCoord.t * textureSurface->h);
