@@ -103,6 +103,8 @@ int main(int argc, char* args[]) {
     float farPlane = 100.0f;
     glm::mat4 perspectiveMatrix = glm::perspective(fieldOfView, aspectRatio, nearPlane, farPlane);
 
+
+    bool isAffine = true;
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
@@ -122,6 +124,9 @@ int main(int argc, char* args[]) {
                         break;
                     case SDLK_RIGHT:
                         cameraPosition.x += 1.0f;
+                        break;
+                    case SDLK_a:
+                        isAffine = !isAffine;
                         break;
                 }
             }
@@ -201,8 +206,11 @@ int main(int argc, char* args[]) {
                 calculateBarycentricCoordinates(p, v1, v2, v3, alpha, beta, gamma);
 
                 if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f && gamma >= 0.0f && gamma <= 1.0f) {
-                    TexCoord texCoord = affineTextureMapping(p, v1, v2, v3, t1, t2, t3);
-                    //TexCoord texCoord = perspectivelyCorrectTextureMapping(p, v1, v2, v3, t1, t2, t3, v1z, v2z, v3z);
+                    TexCoord texCoord;
+                    if (isAffine)
+                        texCoord = affineTextureMapping(p, v1, v2, v3, t1, t2, t3);
+                    else
+                        texCoord = perspectivelyCorrectTextureMapping(p, v1, v2, v3, t1, t2, t3, v1z, v2z, v3z);
 
                     int texX = static_cast<int>(texCoord.s * textureSurface->w);
                     int texY = static_cast<int>(texCoord.t * textureSurface->h);
@@ -230,8 +238,11 @@ int main(int argc, char* args[]) {
                 calculateBarycentricCoordinates(p, v4, v5, v6, alpha, beta, gamma);
 
                 if (alpha >= 0.0f && alpha <= 1.0f && beta >= 0.0f && beta <= 1.0f && gamma >= 0.0f && gamma <= 1.0f) {
-                    TexCoord texCoord = affineTextureMapping(p, v4, v5, v6, t4, t5, t6);
-                    //TexCoord texCoord = perspectivelyCorrectTextureMapping(p, v4, v5, v6, t4, t5, t6, v4z, v5z, v6z);
+                    TexCoord texCoord;
+                    if (isAffine)
+                        texCoord = affineTextureMapping(p, v4, v5, v6, t4, t5, t6);
+                    else
+                        texCoord = perspectivelyCorrectTextureMapping(p, v4, v5, v6, t4, t5, t6, v4z, v5z, v6z);
 
                     int texX = static_cast<int>(texCoord.s * textureSurface->w);
                     int texY = static_cast<int>(texCoord.t * textureSurface->h);
