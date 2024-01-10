@@ -88,7 +88,7 @@ int main(int argc, char* args[]) {
 
     // Initialize rotation angle
     float rotationAngle = 0.0f;
-    const float angularSpeed = glm::two_pi<float>() / 720.0f;  // Adjust for desired rotation speed (e.g., one rotation per second)
+    const float angularSpeed = glm::two_pi<float>() / 120.0f;  // Adjust for desired rotation speed (e.g., one rotation per second)
 
     // Define square parameters
     glm::vec4 vertex1 = glm::vec4(1.0f, -1.0f, 0.0f, 1.0f);
@@ -102,6 +102,7 @@ int main(int argc, char* args[]) {
     float nearPlane = 0.1f;
     float farPlane = 100.0f;
     glm::mat4 perspectiveMatrix = glm::perspective(fieldOfView, aspectRatio, nearPlane, farPlane);
+
 
 
     bool isAffine = true;
@@ -129,6 +130,7 @@ int main(int argc, char* args[]) {
                         isAffine = !isAffine;
                         break;
                 }
+                break;
             }
         }
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
