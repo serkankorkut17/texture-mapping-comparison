@@ -64,7 +64,7 @@ int main(int argc, char* args[]) {
     }
 
     // Load image
-    SDL_Surface* textureSurface = IMG_Load("../spongebob.png");
+    SDL_Surface* textureSurface = IMG_Load("../happy.png");
     if (!textureSurface) {
         std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
         SDL_Quit();
